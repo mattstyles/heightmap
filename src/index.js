@@ -52,7 +52,7 @@ let perturbRidges = new HeightMap({
     return Math.abs( this.getValue( x, y ) )
 })
 
-// radial gradient map
+// JS radial gradient map
 // outside of the radius does not become 0 like a canvas drawn gradient,
 // it keeps going either higher or lower ( 1 - value )
 // let gradMap = new HeightMap({
@@ -125,6 +125,7 @@ function render() {
     renderer.render( heightmap )
     console.log( 'done', performance.now() - start )
 }
+
 
 
 

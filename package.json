@@ -2,7 +2,7 @@
   "name": "heightmap-test",
   "private": true,
   "version": "0.0.0",
-  "description": "Procedurally generates a structure, looks a bit like a neuron",
+  "description": "Playing with heightmaps",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
