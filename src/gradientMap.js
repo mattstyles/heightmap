@@ -1,22 +1,33 @@
 
 import { Color, Point } from './util'
 
+
+function generateContext( opts ) {
+    let canvas = document.createElement( 'canvas' )
+    canvas.setAttribute( 'width', opts.width )
+    canvas.setAttribute( 'height', opts.height )
+    return canvas.getContext( '2d' )
+}
+
+/**
+ * Generates a radial gradient using a canvas element
+ * There is probably an overhead to creating the canvas and context objects,
+ * even though they are not added to the DOM, so consider passing a generic
+ * canvas object if several gradient maps need to be created
+ */
 export default class GradMap {
     constructor( options ) {
         this.map = []
 
         let opts = Object.assign({
-            width: 512,
-            height: 512
+            width: 0x200,
+            height: 0x200
         }, options || {} )
 
         this.width = opts.width
         this.height = opts.height
 
-        let canvas = document.createElement( 'canvas' )
-        canvas.setAttribute( 'width', opts.width )
-        canvas.setAttribute( 'height', opts.height )
-        this.ctx = canvas.getContext( '2d' )
+        this.ctx = opts.ctx || generateContext( opts )
 
         return this
     }

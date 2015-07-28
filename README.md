@@ -1,5 +1,5 @@
-# neural-generation-test
+# heightmap _test_
 
-> Procedurally generates a structure, looks a bit like a neuron, kind of
+> Plays around with utility classes for generating and manipulating heightmaps
 
-Could also be used for caves, tunnels or those dotty eye tests you had as a kid to see if you were colour blind
+None of this is optimised in any way, there are several improvements that would help.
