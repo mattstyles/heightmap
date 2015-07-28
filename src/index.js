@@ -4,6 +4,7 @@ import CONSTANTS from './constants'
 import HeightMap from './heightMap'
 import MapRender from './mapRender'
 import Simplex from './simplex'
+import GradMap from './gradientMap'
 
 import { Point, Vector2, max, min, euclidean, clamp } from './util'
 
@@ -131,6 +132,14 @@ function render() {
     console.log( 'done', performance.now() - start )
 }
 
+let g = new GradMap({
+    width: 512,
+    height: 512
+})
+g.generate({
+    startRadius: 0,
+    endRadius: 512 / 2 - 20
+})
 
 render()
 
@@ -148,3 +157,4 @@ window.HeightMap = HeightMap
 window.renderer = renderer
 window.heightmap = heightmap
 window.simplex = simplex
+window.gradMap = g

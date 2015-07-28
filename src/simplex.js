@@ -1,6 +1,5 @@
 
 import FastSimplex from 'fast-simplex-noise'
-import CONSTANTS from './constants'
 
 export default class Simplex {
     constructor( params ) {

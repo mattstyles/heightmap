@@ -76,3 +76,19 @@ export class Vector2 {
         return Math.sqrt( Math.pow( this.x, 2 ) + Math.pow( this.y, 2 ) )
     }
 }
+
+export class Color {
+    constructor( r, g, b, a ) {
+        this.color = [ r, g, b ]
+
+        if ( a ) {
+            this.color.push( a )
+        }
+    }
+
+    toString() {
+        return 'rgb' +
+            ( this.color[ 3 ] ? 'a' : '' ) +
+            '(' + this.color.join( ',' ) + ')'
+    }
+}
