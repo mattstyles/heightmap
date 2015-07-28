@@ -22,10 +22,10 @@ const simplex = new Simplex({
 })
 
 let s = new Simplex({
-    min: 0,
+    min: -1,
     max: 1,
     persistence: .5,
-    frequency: .02
+    frequency: .005
 }).generate({
     width: CONSTANTS.WIDTH,
     height: CONSTANTS.HEIGHT
@@ -52,12 +52,20 @@ const heightmap = new HeightMap({
             y: CONSTANTS.HEIGHT / 2
         })
         // return ( 1 - ( dist / radius ) ) * this.getValue( x, y )
-        let value = 1 - ( dist / radius )
+        // let value = 1 - ( dist / radius )
+        let value = dist / radius
+        return value * this.getValue( x, y ) * Math.abs( hm.getValue( x, y ) )
+        // return ( value + this.getValue( x, y ) + Math.abs( hm.getValue( x, y ) ) ) * 3
+        // return value * this.getValue( x, y )
         // return ( value > .2 ? value : 0 ) * this.getValue( x, y )
-        return clamp( value, .2, 1 ) * this.getValue( x, y )
+        // return clamp( value, .2, 1 ) * this.getValue( x, y )
     })
     // .mutate2d( function( x, y ) {
-    //     return hm.getValue( x, y ) * this.getValue( x, y )
+    //     // The abs here with a -1...1 heightmap produces the ridges
+    //     return Math.abs( hm.getValue( x, y ) ) * this.getValue( x, y )
+    // })
+    // .mutate2d( function( x, y ) {
+    //     return 1 - this.getValue( x, y )
     // })
     .normalize()
 console.log( 'done', performance.now() - start )

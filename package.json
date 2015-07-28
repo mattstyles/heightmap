@@ -1,5 +1,6 @@
 {
-  "name": "neural-generation-test",
+  "name": "heightmap-test",
+  "private": true,
   "version": "0.0.0",
   "description": "Procedurally generates a structure, looks a bit like a neuron",
   "main": "index.js",
