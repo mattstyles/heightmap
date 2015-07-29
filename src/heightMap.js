@@ -154,6 +154,10 @@ export default class HeightMap {
         return this.map[ this.to1d( x, y ) ]
     }
 
+    setValue( x, y, value ) {
+        this.map[ this.to1d( x, y ) ] = value
+    }
+
     getRegion( x1, y1, x2, y2 ) {
         let region = []
 
