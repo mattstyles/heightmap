@@ -31,22 +31,24 @@ var simplex = new Simplex({
     min: 0,
     max: 1,
     octaves: 4,
-    persistence: .5,
-    frequency: .005
+    persistence: .3,
+    frequency: .01
 })
 const base = new HeightMap()
     .addFunction( 1, simplex.getValue )
+    .addFunction( 1, function( x, y ) {
+        return .3
+    })
 
 let perturb = new Simplex({
     min: -1,
     max: 1,
-    octaves: 4,
-    persistence: .35,
-    frequency: .02
+    persistence: .5,
+    frequency: .005
 })
 const ridged = new HeightMap()
-    .addFunction( 5, base.getValue )
-    .addFunction( 2, function( x, y ) {
+    .addFunction( 2, base.getValue )
+    .addFunction( 10, function( x, y ) {
         // Adds the ridges
         return Math.abs( perturb.getValue( x, y ) )
     })
