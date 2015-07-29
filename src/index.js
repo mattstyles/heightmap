@@ -19,7 +19,7 @@ const renderer = new MapRender({
 
 const renderer2 = new MapRender({
     style: {
-        left: CONSTANTS.WIDTH + 'px',
+        left: CONSTANTS.WIDTH / window.devicePixelRatio + 'px',
         zIndex: 10
     }
 })
