@@ -4,6 +4,10 @@ export function to1d( x, y ) {
     return x + ( y * CONSTANTS.WIDTH )
 }
 
+export function lerp( value, min, max ) {
+    return min + value * ( max - min )
+}
+
 export function max( map ) {
     // return map.reduce( ( prev, curr ) => curr > prev ? curr : prev, 0 )
     let val = 0
@@ -30,11 +34,6 @@ export function clamp( value, min, max ) {
             : value
 }
 
-
-let nodeSizeRange = CONSTANTS.NODE.MAX_SIZE - CONSTANTS.NODE.MIN_SIZE
-export function lerpSize( value ) {
-    return CONSTANTS.NODE.MIN_SIZE + value * nodeSizeRange
-}
 
 
 // Squaring and rooting is fairly expensive

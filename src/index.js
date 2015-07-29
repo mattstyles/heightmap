@@ -6,7 +6,6 @@ import CONSTANTS from './constants'
 import HeightMap from './heightMap'
 import MapRender from './mapRender'
 import Simplex from './simplex'
-import GradMap from './gradientMap'
 
 
 import { Point, Vector2, max, min, euclidean, clamp } from './util'
@@ -113,7 +112,7 @@ function render() {
         heightmap: base
     })
     renderer2.render({
-        heightmap: right,
+        heightmap: base,
         x: 512,
         y: 0
     })
