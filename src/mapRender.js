@@ -14,7 +14,7 @@ export default class MapRender {
         }, options || {} )
 
         if ( options && options.style ) {
-            opts.style = Object.assign( opts.style, options.style )
+            opts.style = Object.assign( CONSTANTS.STYLE, opts.style )
         }
 
         // New canvas
@@ -24,7 +24,7 @@ export default class MapRender {
         canvas.setAttribute( 'width', opts.width )
         canvas.setAttribute( 'height', opts.height )
         Object.keys( opts.style ).forEach( style => {
-            canvas.style[ style ] = CONSTANTS.STYLE[ style ]
+            canvas.style[ style ] = opts.style[ style ]
         })
         document.body.appendChild( canvas )
     }
@@ -42,14 +42,24 @@ export default class MapRender {
         this.ctx.clearRect( 0, 0, CONSTANTS.WIDTH, CONSTANTS.HEIGHT )
     }
 
-    render( heightmap ) {
+    render( params ) {
+
+        let opts = Object.assign({
+            heightmap: null,
+            x: 0,
+            y: 0
+        }, params )
+
+        if ( !opts.heightmap ) {
+            throw new Error( 'heightmap not supplied to render function' )
+        }
         // let pixelWidth = CONSTANTS.WIDTH / heightmap.width
         // let pixelHeight = CONSTANTS.HEIGHT / heightmap.height
 
-        for( let y = 0; y < CONSTANTS.HEIGHT; y++ ) {
-            for( let x = 0; x < CONSTANTS.WIDTH; x++ ) {
-                this.ctx.fillStyle = this.renderColor( heightmap.getValue( x, y ) )
-                this.ctx.fillRect( x, y, 1, 1 )
+        for( let j = opts.y; j < opts.y + CONSTANTS.HEIGHT; j++ ) {
+            for( let i = opts.x; i < opts.x + CONSTANTS.WIDTH; i++ ) {
+                this.ctx.fillStyle = this.renderColor( opts.heightmap.getValue( i, j ) )
+                this.ctx.fillRect( i - opts.x, j - opts.y, 1, 1 )
             }
         }
         // heightmap.iterate2d( ( value, x, y ) => {

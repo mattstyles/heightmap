@@ -162,20 +162,20 @@ export default class HeightMap {
         return this
     }
 
-    getValue( x, y ) {
+    getValue = ( x, y ) => {
         // return this.map[ this.to1d( x, y ) ]
         if ( !this.funcs.length ) {
             throw new Error( 'heightmap does not have a generate function' )
         }
 
-        let totalWeight = this.funcs.length > 1 ? 0 : this.funcs[ 0 ].weight
-        let value = this.funcs.length > 1
-            ? this.funcs.reduce( ( prev, curr ) => {
-                totalWeight += curr.weight
-                return prev.fn( x, y ) * prev.weight + ( curr.fn( x, y ) * curr.weight )
-            })
-            : this.funcs[ 0 ].fn( x, y ) * this.funcs[ 0 ].weight
+        let value = 0
+        let totalWeight = 0
+        this.funcs.forEach( pass => {
+            totalWeight += pass.weight
+            value += pass.weight * pass.fn( x, y )
+        })
 
+        // @TODO cache it
         return value / totalWeight
     }
 
