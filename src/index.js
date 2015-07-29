@@ -7,7 +7,7 @@ import HeightMap from './heightMap'
 import MapRender from './mapRender'
 import Simplex from './simplex'
 
-
+import { radial } from './generators'
 import { Point, Vector2, max, min, euclidean, clamp } from './util'
 
 const renderer = new MapRender({
@@ -57,6 +57,8 @@ let perturb = new Simplex({
     persistence: .5,
     frequency: .005
 })
+
+
 const ridged = new HeightMap()
     .addFunction({
         weight: 2,
@@ -71,26 +73,8 @@ const ridged = new HeightMap()
     })
     .addFunction({
         weight: 10,
-        fn: function( x, y ) {
-            // Adds radial gradient to center of chunk
-            let i = x % CONSTANTS.WIDTH
-            let j = y % CONSTANTS.WIDTH
-
-            let radius = CONSTANTS.WIDTH / 2
-            let dist = euclidean({
-                x: i,
-                y: j
-            }, {
-                x: CONSTANTS.WIDTH / 2,
-                y: CONSTANTS.HEIGHT / 2
-            })
-
-            // return 1 - dist / radius
-            return clamp( 1 - dist / radius, 0, 1 )
-        }
+        fn: radial( CONSTANTS.WIDTH / 2 )
     })
-
-
 
 
 const right = new HeightMap()
@@ -103,7 +87,7 @@ const right = new HeightMap()
             }
 
             let seamWidth = CONSTANTS.WIDTH / Math.pow( 2, 2 )
-            // let pow = 2
+            let pow = 2
             let val = 0
             let i = x % CONSTANTS.WIDTH
 
@@ -112,9 +96,9 @@ const right = new HeightMap()
             if ( i < seamWidth ) {
                 // Heightmap is the chunk to the left in this example
                 val = lerp(
-                    // Math.pow( i / seamWidth, pow ),
-                    i / seamWidth,
-                    base.getValue( x, y ),      // Values from the left chunk
+                    Math.pow( i / seamWidth, pow ),
+                    // i / seamWidth,
+                    baseMuted.getValue( x, y ),      // Values from the left chunk
                     mapValue                    // mixed with values from this chunk
                 )
 
@@ -161,3 +145,4 @@ window.renderer = renderer
 
 window.random = random
 window.base = base
+window.radial = radial
