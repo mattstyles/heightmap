@@ -34,9 +34,21 @@ var simplex = new Simplex({
     frequency: .01
 })
 const base = new HeightMap()
-    .addFunction( 1, simplex.getValue )
-    .addFunction( 1, function( x, y ) {
-        return .3
+    .addFunction({
+        weight: 1,
+        fn: simplex.getValue
+    })
+
+const baseMuted = new HeightMap()
+    .addFunction({
+        weight: 1,
+        fn: base.getValue
+    })
+    .addFunction({
+        weight: 1,
+        fn: function( x, y ) {
+            return .3
+        }
     })
 
 let perturb = new Simplex({
@@ -46,59 +58,71 @@ let perturb = new Simplex({
     frequency: .005
 })
 const ridged = new HeightMap()
-    .addFunction( 2, base.getValue )
-    .addFunction( 10, function( x, y ) {
-        // Adds the ridges
-        return Math.abs( perturb.getValue( x, y ) )
+    .addFunction({
+        weight: 2,
+        fn: base.getValue
     })
-    .addFunction( 10, function( x, y ) {
-        // Adds radial gradient to center of chunk
-        let i = x % CONSTANTS.WIDTH
-        let j = y % CONSTANTS.WIDTH
+    .addFunction({
+        weight: 10,
+        fn: function( x, y ) {
+            // Adds the ridges
+            return Math.abs( perturb.getValue( x, y ) )
+        }
+    })
+    .addFunction({
+        weight: 10,
+        fn: function( x, y ) {
+            // Adds radial gradient to center of chunk
+            let i = x % CONSTANTS.WIDTH
+            let j = y % CONSTANTS.WIDTH
 
-        let radius = CONSTANTS.WIDTH / 2
-        let dist = euclidean({
-            x: i,
-            y: j
-        }, {
-            x: CONSTANTS.WIDTH / 2,
-            y: CONSTANTS.HEIGHT / 2
-        })
+            let radius = CONSTANTS.WIDTH / 2
+            let dist = euclidean({
+                x: i,
+                y: j
+            }, {
+                x: CONSTANTS.WIDTH / 2,
+                y: CONSTANTS.HEIGHT / 2
+            })
 
-        // return 1 - dist / radius
-        return clamp( 1 - dist / radius, 0, 1 )
+            // return 1 - dist / radius
+            return clamp( 1 - dist / radius, 0, 1 )
+        }
     })
 
 
 
 
 const right = new HeightMap()
-    .addFunction( 1, function( x, y ) {
-        // Now handle the seam
-        function lerp( value, min, max ) {
-            return min + value * ( max - min )
+    .addFunction({
+        weight: 1,
+        fn: function( x, y ) {
+            // Now handle the seam
+            function lerp( value, min, max ) {
+                return min + value * ( max - min )
+            }
+
+            let seamWidth = CONSTANTS.WIDTH / Math.pow( 2, 2 )
+            // let pow = 2
+            let val = 0
+            let i = x % CONSTANTS.WIDTH
+
+            let mapValue = ridged.getValue( x, y )
+
+            if ( i < seamWidth ) {
+                // Heightmap is the chunk to the left in this example
+                val = lerp(
+                    // Math.pow( i / seamWidth, pow ),
+                    i / seamWidth,
+                    base.getValue( x, y ),      // Values from the left chunk
+                    mapValue                    // mixed with values from this chunk
+                )
+
+                return val
+            }
+
+            return mapValue
         }
-
-        let seamWidth = CONSTANTS.WIDTH / Math.pow( 2, 2 )
-        // let pow = 2
-        let val = 0
-        let i = x % CONSTANTS.WIDTH
-
-        let mapValue = ridged.getValue( x, y )
-
-        if ( i < seamWidth ) {
-            // Heightmap is the chunk to the left in this example
-            val = lerp(
-                // Math.pow( i / seamWidth, pow ),
-                i / seamWidth,
-                base.getValue( x, y ),      // Values from the left chunk
-                mapValue                    // mixed with values from this chunk
-            )
-
-            return val
-        }
-
-        return mapValue
     })
 
 console.log( 'done', performance.now() - start )
@@ -109,10 +133,10 @@ function render() {
     start = performance.now()
     renderer.clear()
     renderer.render({
-        heightmap: base
+        heightmap: baseMuted
     })
     renderer2.render({
-        heightmap: base,
+        heightmap: right,
         x: 512,
         y: 0
     })
