@@ -43,19 +43,20 @@ export default class MapRender {
     }
 
     render( heightmap ) {
-        let pixelWidth = CONSTANTS.WIDTH / heightmap.width
-        let pixelHeight = CONSTANTS.HEIGHT / heightmap.height
+        // let pixelWidth = CONSTANTS.WIDTH / heightmap.width
+        // let pixelHeight = CONSTANTS.HEIGHT / heightmap.height
 
-        // for( let y = 0; y < map.height; y++ ) {
-        //     for( let x = 0; x < map.width; x++ ) {
-        //         this.ctx.fillStyle = this.renderColor( map.getValue( x, y ) )
-        //         this.ctx.fillRect( x * pixelWidth, y * pixelHeight, pixelWidth, pixelHeight )
-        //     }
-        // }
-        heightmap.iterate2d( ( value, x, y ) => {
-            this.ctx.fillStyle = this.renderColor( value )
-            this.ctx.fillRect( x * pixelWidth, y * pixelHeight, pixelWidth, pixelHeight )
-        })
+        for( let y = 0; y < CONSTANTS.HEIGHT; y++ ) {
+            for( let x = 0; x < CONSTANTS.WIDTH; x++ ) {
+                this.ctx.fillStyle = this.renderColor( heightmap.getValue( x, y ) )
+                this.ctx.fillRect( x, y, 1, 1 )
+            }
+        }
+        // heightmap.iterate2d( ( value, x, y ) => {
+        //     this.ctx.fillStyle = this.renderColor( value )
+        //     this.ctx.fillRect( x * pixelWidth, y * pixelHeight, pixelWidth, pixelHeight )
+        // })
+
     }
 
 }

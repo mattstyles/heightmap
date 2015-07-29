@@ -11,8 +11,20 @@ export default class HeightMap {
         this.width = opts.width
         this.height = opts.height
 
+        this.funcs = []
+
         return this
     }
+
+    addFunction( weight, fn ) {
+        this.funcs.push({
+            weight: weight,
+            fn: fn
+        })
+
+        return this
+    }
+
 
     to1d( x, y ) {
         return x + y * this.width
@@ -151,7 +163,20 @@ export default class HeightMap {
     }
 
     getValue( x, y ) {
-        return this.map[ this.to1d( x, y ) ]
+        // return this.map[ this.to1d( x, y ) ]
+        if ( !this.funcs.length ) {
+            throw new Error( 'heightmap does not have a generate function' )
+        }
+
+        let totalWeight = this.funcs.length > 1 ? 0 : this.funcs[ 0 ].weight
+        let value = this.funcs.length > 1
+            ? this.funcs.reduce( ( prev, curr ) => {
+                totalWeight += curr.weight
+                return prev.fn( x, y ) * prev.weight + ( curr.fn( x, y ) * curr.weight )
+            })
+            : this.funcs[ 0 ].fn( x, y ) * this.funcs[ 0 ].weight
+
+        return value / totalWeight
     }
 
     setValue( x, y, value ) {

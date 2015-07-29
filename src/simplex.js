@@ -28,4 +28,8 @@ export default class Simplex {
         return this
     }
 
+    getValue = ( x, y ) => {
+        return this.simplex.get2DNoise( x, y )
+    }
+
 }
