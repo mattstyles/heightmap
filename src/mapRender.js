@@ -5,18 +5,27 @@ import CONSTANTS from './constants'
  * Renders heightmaps
  */
 export default class MapRender {
-    constructor() {
+    constructor( options ) {
+
+        let opts = Object.assign({
+            width: CONSTANTS.WIDTH,
+            height: CONSTANTS.HEIGHT,
+            style: CONSTANTS.STYLE
+        }, options || {} )
+
+        if ( options && options.style ) {
+            opts.style = Object.assign( opts.style, options.style )
+        }
 
         // New canvas
         const canvas = document.createElement( 'canvas' )
         this.ctx = canvas.getContext( '2d' )
         canvas.setAttribute( 'id', 'render' )
-        canvas.setAttribute( 'width', CONSTANTS.WIDTH )
-        canvas.setAttribute( 'height', CONSTANTS.HEIGHT )
-        Object.keys( CONSTANTS.STYLE ).forEach( style => {
+        canvas.setAttribute( 'width', opts.width )
+        canvas.setAttribute( 'height', opts.height )
+        Object.keys( opts.style ).forEach( style => {
             canvas.style[ style ] = CONSTANTS.STYLE[ style ]
         })
-        canvas.style.zIndex = 20
         document.body.appendChild( canvas )
     }
 
