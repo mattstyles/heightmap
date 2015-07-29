@@ -1,4 +1,6 @@
 
+import random from 'lodash.random'
+
 import CONSTANTS from './constants'
 // import Gui from './gui'
 import HeightMap from './heightMap'
@@ -8,7 +10,11 @@ import GradMap from './gradientMap'
 
 import { Point, Vector2, max, min, euclidean, clamp } from './util'
 
-const renderer = new MapRender()
+const renderer = new MapRender({
+    style: {
+        zIndex: 10
+    }
+})
 
 console.log( 'generating simplex' )
 let start = performance.now()
@@ -127,9 +133,46 @@ function render() {
 }
 
 
-
-
 render()
+
+
+const chunkRenderer = new MapRender({
+    style: {
+        zIndex: 20,
+        left: CONSTANTS.WIDTH
+    }
+})
+
+const chunk = new HeightMap({
+    width: CONSTANTS.WIDTH,
+    height: CONSTANTS.HEIGHT
+})
+    .mutate2d( function( x, y ) {
+        return simplex.simplex.get2DNoise( x + CONSTANTS.WIDTH, y )
+    })
+    .mutate2d( function( x, y ) {
+        // Now handle the seam
+        function lerp( value, min, max ) {
+            return min + value * ( max - min )
+        }
+
+        let seamWidth = this.width / Math.pow( 2, 2 )
+        let pow = 2
+        if ( x < seamWidth ) {
+            // Heightmap is the chunk to the left in this example
+            let value = lerp( Math.pow( x / seamWidth, pow ), heightmap.getValue( heightmap.width - 1 - x, y ), this.getValue( x, y ) )
+            // let value = heightmap.getValue( heightmap.width - 1, y )
+            this.setValue( x, y, value )
+
+            if ( y === 0 ) {
+                console.log( x, ' ', value )
+            }
+        }
+
+        return this.getValue( x, y )
+    })
+
+chunkRenderer.render( chunk )
 
 
 window.Vector2 = Vector2
@@ -146,3 +189,5 @@ window.renderer = renderer
 window.heightmap = heightmap
 window.simplex = simplex
 window.gradMap = gradMap
+
+window.random = random
