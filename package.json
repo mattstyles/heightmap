@@ -8,17 +8,14 @@
     "preexamples": "npm run build",
     "examples": "browserify examples/index.js -t babelify -d > examples/bundle.js",
     "prebuild": "rm -rf dist && mkdir dist",
-    "build": "babel src/index.js > dist/index.js",
-    "prewatch": "npm run build",
-    "watch": "watch 'npm run build' src"
+    "build": "babel src/index.js > dist/index.js"
   },
   "author": "Matt Styles",
   "license": "WTFPL",
   "devDependencies": {
     "babel": "^5.8.21",
     "babelify": "^6.1.3",
-    "browserify": "^11.0.0",
-    "watch": "^0.16.0"
+    "browserify": "^11.0.0"
   },
   "dependencies": {
     "fast-simplex-noise": "^1.0.0",
