@@ -3,7 +3,7 @@ import random from 'lodash.random'
 
 import CONSTANTS from './constants'
 // import Gui from './gui'
-import HeightMap from '../dist'
+import HeightMap from '../dist/heightmap.es6'
 import MapRender from './mapRender'
 import Simplex from './simplex'
 
@@ -50,7 +50,7 @@ const perturb = new Simplex({
 
 // Heightmap function based on base simplex
 const base = new HeightMap()
-    .addFunction({
+    .generator({
         weight: 1,
         fn: simplex.getValue
     })
@@ -58,7 +58,7 @@ const base = new HeightMap()
 // Maps x, y to 0-.3
 // LEFT base chunk type
 const baseMuted = new HeightMap()
-    .addFunction({
+    .generator({
         weight: 1,
         fn: ( x, y ) => base.getValue( x, y ) * .3
     })
@@ -66,25 +66,25 @@ const baseMuted = new HeightMap()
 
 // RIGHT base chunk type
 const ridged = new HeightMap()
-    .addFunction({
+    .generator({
         weight: 1,
         fn: base.getValue
     })
-    .addFunction({
+    .generator({
         weight: 5,
         fn: function( x, y ) {
             // Adds the ridges
             return Math.abs( perturb.getValue( x, y ) )
         }
     })
-    .addFunction({
+    .generator({
         weight: 5,
         fn: radial( CONSTANTS.WIDTH / 2 )
     })
 
 
 const right = new HeightMap()
-    .addFunction({
+    .generator({
         weight: 1,
         fn: function( x, y ) {
             // Now handle the seam
@@ -112,7 +112,7 @@ const right = new HeightMap()
     })
 
 const left = new HeightMap()
-    .addFunction({
+    .generator({
         weight: 1,
         fn: function( x, y ) {
             // Now handle the seam
