@@ -3,7 +3,7 @@ import random from 'lodash.random'
 
 import CONSTANTS from './constants'
 // import Gui from './gui'
-import HeightMap from './heightMap'
+import HeightMap from '../dist'
 import MapRender from './mapRender'
 import Simplex from './simplex'
 
