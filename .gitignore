@@ -1,4 +1,4 @@
 node_modules
+lib
 *.log
-dist
 examples/bundle.js

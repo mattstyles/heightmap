@@ -2,14 +2,14 @@
   "name": "heightmap",
   "version": "0.1.0",
   "description": "Procedurally generate heightmaps",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "preexamples": "npm run build",
     "examples": "browserify examples/index.js -t babelify -d > examples/bundle.js",
-    "prebuild": "rm -rf dist && mkdir dist",
-    "build": "babel src/index.js > dist/index.js",
-    "postbuild": "cp src/index.js dist/heightmap.es6"
+    "prebuild": "rm -rf lib && mkdir lib",
+    "build": "babel src/index.js > lib/index.js",
+    "postbuild": "cp src/index.js lib/heightmap.es6 && babel src/generators --out-dir lib/generators"
   },
   "author": "Matt Styles",
   "license": "WTFPL",

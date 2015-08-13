@@ -3,12 +3,14 @@ import random from 'lodash.random'
 
 import CONSTANTS from './constants'
 // import Gui from './gui'
-import HeightMap from '../dist/heightmap.es6'
+import HeightMap from '../lib/heightmap.es6'
 import MapRender from './mapRender'
 import Simplex from './simplex'
 
 import { radial } from './generators'
 import { Point, Vector2, max, min, euclidean, clamp } from './util'
+
+import { simplex } from '../lib/generators'
 
 const renderer = new MapRender({
     style: {
@@ -33,13 +35,13 @@ console.log( 'generating simplex' )
 let start = performance.now()
 
 // Simplex functions
-const simplex = new Simplex({
-    min: 0,
-    max: 1,
-    octaves: 4,
-    persistence: .3,
-    frequency: .01
-})
+// const simplex = new Simplex({
+//     min: 0,
+//     max: 1,
+//     octaves: 4,
+//     persistence: .3,
+//     frequency: .01
+// })
 const perturb = new Simplex({
     min: -1,
     max: 1,
@@ -49,10 +51,21 @@ const perturb = new Simplex({
 
 
 // Heightmap function based on base simplex
+// const base = new HeightMap()
+//     .generator({
+//         weight: 1,
+//         fn: simplex.getValue
+//     })
 const base = new HeightMap()
     .generator({
         weight: 1,
-        fn: simplex.getValue
+        fn: simplex({
+            min: 0,
+            max: 1,
+            octaves: 4,
+            persistence: .3,
+            frequency: .01
+        })
     })
 
 // Maps x, y to 0-.3
