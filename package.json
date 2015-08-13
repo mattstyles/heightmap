@@ -8,7 +8,8 @@
     "preexamples": "npm run build",
     "examples": "browserify examples/index.js -t babelify -d > examples/bundle.js",
     "prebuild": "rm -rf dist && mkdir dist",
-    "build": "babel src/index.js > dist/index.js"
+    "build": "babel src/index.js > dist/index.js",
+    "postbuild": "cp src/index.js dist/index.es6"
   },
   "author": "Matt Styles",
   "license": "WTFPL",
