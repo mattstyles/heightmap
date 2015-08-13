@@ -1,6 +1,7 @@
 
 /**
  * Heightmap class that handles procedurally generating an x,y point
+ * @class
  */
 export default class HeightMap {
     /**
@@ -13,12 +14,22 @@ export default class HeightMap {
     }
 
     /**
-     * Pushes a generator function and weight to the stack
-     * @param params <Object>
+     * Pushes a generator descriptor to the stack
+     * A descriptor requires a weight and a function that takes an <x.y> point
+     * and returns a value between 0 and 1
+     * @param params <Object> generator descriptor
      *   @param weight <Integer> the weighting to apply to this generator
      *   @param fn <Func> generator function that returns a value
      */
-    addFunction( params ) {
+    generator( params ) {
+        if ( !params ) {
+            throw new Error( 'Heightmap::generator descriptor required' )
+        }
+
+        if ( !params.weight || !params.fn ) {
+            throw new Error( 'Heightmap::generator invalid descriptor' )
+        }
+
         this.funcs.push( params )
 
         return this
@@ -26,8 +37,9 @@ export default class HeightMap {
 
     /**
      * Iterates over a range of values
-     * @param bounds <Rect> bounds to iterate over
+     * @param bounds <Rect> bounds to iterate over <x1.x2.y1.y2>
      * @param cb <Func> function to call for each position
+     *   callback gets called with the value at a position and the position as <x.y>
      */
     iterate( bounds, cb ) {
         if ( !bounds ) {
@@ -40,17 +52,25 @@ export default class HeightMap {
 
         for ( let y = bounds.y1; y < bounds.y2; y++ ) {
             for ( let x = bounds.x1; x < bounds.x2; x++ ) {
-                cb.call( this, this.getValue( x, y ), x, y )
+                cb.call( this, this.getValue( x, y ), {
+                    x: x,
+                    y: y
+                })
             }
         }
 
         return this
     }
 
+    /**
+     * Returns a value from an x, y location point
+     * @param x <Integer>
+     * @param y <Integer>
+     * @returns <Float> 0...1
+     */
     getValue = ( x, y ) => {
-        // return this.map[ this.to1d( x, y ) ]
         if ( !this.funcs.length ) {
-            throw new Error( 'heightmap does not have a generate function' )
+            throw new Error( 'Heightmap does not have a generator function' )
         }
 
         let value = 0
