@@ -1,13 +1,14 @@
 {
-  "name": "heightmap-test",
-  "private": true,
+  "name": "heightmap",
   "version": "0.0.0",
-  "description": "Playing with heightmaps",
-  "main": "index.js",
+  "description": "Procedurally generate heightmaps",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "preexamples": "npm run build",
+    "examples": "browserify examples/index.js -t babelify -d > examples/bundle.js",
     "prebuild": "rm -rf dist && mkdir dist",
-    "build": "browserify src/index.js -t babelify -d > dist/index.js",
+    "build": "babel src/index.js > dist/index.js",
     "prewatch": "npm run build",
     "watch": "watch 'npm run build' src"
   },
@@ -19,7 +20,6 @@
     "watch": "^0.16.0"
   },
   "dependencies": {
-    "dat-gui": "^0.5.0",
     "fast-simplex-noise": "^1.0.0",
     "lodash.random": "^3.0.1"
   }
