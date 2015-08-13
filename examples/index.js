@@ -5,7 +5,6 @@ import CONSTANTS from './constants'
 // import Gui from './gui'
 import HeightMap from '../lib/heightmap.es6'
 import MapRender from './mapRender'
-import Simplex from './simplex'
 
 import { radial } from './generators'
 import { Point, Vector2, max, min, euclidean, clamp } from './util'
@@ -35,14 +34,7 @@ console.log( 'generating simplex' )
 let start = performance.now()
 
 // Simplex functions
-// const simplex = new Simplex({
-//     min: 0,
-//     max: 1,
-//     octaves: 4,
-//     persistence: .3,
-//     frequency: .01
-// })
-const perturb = new Simplex({
+const perturb = simplex({
     min: -1,
     max: 1,
     persistence: .5,
@@ -50,12 +42,7 @@ const perturb = new Simplex({
 })
 
 
-// Heightmap function based on base simplex
-// const base = new HeightMap()
-//     .generator({
-//         weight: 1,
-//         fn: simplex.getValue
-//     })
+// Heightmap function based on base simplex generator
 const base = new HeightMap()
     .generator({
         weight: 1,
@@ -87,7 +74,7 @@ const ridged = new HeightMap()
         weight: 5,
         fn: function( x, y ) {
             // Adds the ridges
-            return Math.abs( perturb.getValue( x, y ) )
+            return Math.abs( perturb( x, y ) )
         }
     })
     .generator({
