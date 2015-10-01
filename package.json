@@ -1,9 +1,10 @@
 {
   "name": "heightmap",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Procedurally generate heightmaps",
   "main": "lib/index.js",
   "scripts": {
+    "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "preexamples": "npm run build",
     "examples": "browserify examples/index.js -t babelify -d > examples/bundle.js",
