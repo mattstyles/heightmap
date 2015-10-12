@@ -1,5 +1,6 @@
 
 import random from 'lodash.random'
+import Bezier from 'bezier-easing'
 
 import CONSTANTS from './constants'
 // import Gui from './gui'
@@ -41,18 +42,40 @@ const perturb = simplex({
     frequency: .005
 })
 
+const sim = simplex({
+    min: 0,
+    max: 1,
+    octaves: 4,
+    persistence: 1 / Math.pow( 2, 4 ),
+    frequency: 1 / Math.pow( 2, 8 ),
+    amplitude: 1
+})
+
+const curve = new Bezier( .75, .1, .85, 1 )
 
 // Heightmap function based on base simplex generator
 const base = new HeightMap()
     .generator({
         weight: 1,
-        fn: simplex({
-            min: 0,
-            max: 1,
-            octaves: 4,
-            persistence: .3,
-            frequency: .01
-        })
+        // fn: simplex({
+        //     min: 0,
+        //     max: 1,
+        //     octaves: 4,
+        //     persistence: .3,
+        //     frequency: .01
+        // })
+        // fn: simplex({
+        //     min: 0,
+        //     max: 1,
+        //     octaves: 4,
+        //     persistence: 1 / Math.pow( 2, 4 ),
+        //     frequency: 1 / Math.pow( 2, 8 ),
+        //     amplitude: 1
+        // })
+        fn: function( x, y ) {
+            // Also uses a custom bezier curve to define edges in simplex
+            return curve.get( sim( x, y ) )
+        }
     })
 
 // Maps x, y to 0-.3
@@ -157,14 +180,14 @@ function render() {
     renderer.clear()
 
     renderer.render({
-        heightmap: left
+        heightmap: base
     })
 
-    renderer2.render({
-        heightmap: right,
-        x: 512,
-        y: 0
-    })
+    // renderer2.render({
+    //     heightmap: right,
+    //     x: 512,
+    //     y: 0
+    // })
     console.log( 'done', performance.now() - start )
 }
 
